@@ -149,7 +149,7 @@ composer test
 
 ## Roadmap
 
-- Add tests.
+- Increase code coverage to ~95%.
 - Add config option to change `requestId` key.
 - Add IP block middleware.
 - Add auto visitor store support with `Visitor` model and migrations.
