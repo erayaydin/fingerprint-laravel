@@ -4,6 +4,7 @@
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/erayaydin/fingerprint-laravel/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/erayaydin/fingerprint-laravel/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/erayaydin/fingerprint-laravel/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/erayaydin/fingerprint-laravel/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/erayaydin/fingerprint-laravel.svg?style=flat-square)](https://packagist.org/packages/erayaydin/fingerprint-laravel)
+[![Test Coverage](https://raw.githubusercontent.com/erayaydin/fingerprint-laravel/main/badge-coverage.svg)](https://packagist.org/packages/erayaydin/fingerprint-laravel)
 
 Fingerprint Laravel is a package for integrating Fingerprint Server API into your Laravel application with [PHP SDK for Fingerprint Pro Server API](https://github.com/fingerprintjs/fingerprint-pro-server-api-php-sdk).
 It provides HTTP middlewares to block bots, VPNs, Tor, and more based on Fingerprint Server API event response.
