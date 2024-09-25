@@ -1,0 +1,13 @@
+### Composer
+composer.lock
+/vendor
+
+### PHPStan
+/build
+
+### PHPUnit
+.phpunit.cache
+.phpunit.result.cache
+
+### Intellij
+/.idea

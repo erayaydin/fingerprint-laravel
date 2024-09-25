@@ -1,0 +1,83 @@
+{
+    "name": "erayaydin/fingerprint-laravel",
+    "description": "Fingerprint Laravel Wrapper",
+    "type": "library",
+    "license": "MIT",
+    "homepage": "https://github.com/erayaydin/fingerprint-laravel",
+    "authors": [
+        {
+            "name": "Eray Aydın",
+            "email": "erayaydinn@protonmail.com",
+            "role": "Maintainer"
+        }
+    ],
+    "scripts": {
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare"
+        ],
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "@build",
+            "@php vendor/bin/testbench serve --ansi"
+        ],
+        "lint": "@php vendor/bin/phpstan analyse --verbose --ansi",
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "format": "vendor/bin/pint"
+    },
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^11.24",
+        "fingerprint/fingerprint-pro-server-api-sdk": "^5.0",
+        "illuminate/http": "^11.24",
+        "illuminate/routing": "^11.24"
+    },
+    "require-dev": {
+        "larastan/larastan": "^2.0",
+        "laravel/pint": "^1.18",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^8.4",
+        "orchestra/testbench": "^9.5",
+        "pestphp/pest": "^3.2",
+        "pestphp/pest-plugin-arch": "^3.0",
+        "pestphp/pest-plugin-laravel": "^3.0",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan": "^1.12",
+        "phpstan/phpstan-deprecation-rules": "^1.2",
+        "phpstan/phpstan-phpunit": "^1.4",
+        "spatie/laravel-ray": "^1.37"
+    },
+    "autoload": {
+        "psr-4": {
+            "ErayAydin\\Fingerprint\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ErayAydin\\Fingerprint\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "extra": {
+        "laravel": {
+            "providers": [
+                "ErayAydin\\Fingerprint\\FingerprintServiceProvider"
+            ],
+            "aliases": {
+                "Fingerprint": "ErayAydin\\Fingerprint\\Facades\\Fingerprint"
+            }
+        }
+    }
+}
