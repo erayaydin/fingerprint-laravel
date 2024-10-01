@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1727284206">
-  <project timestamp="1727284206">
+<coverage generated="1727766285">
+  <project timestamp="1727766285">
     <package name="ErayAydin\Fingerprint\Console">
       <file name="/home/runner/work/fingerprint-laravel/fingerprint-laravel/src/Console/AboutCommandRegistrar.php">
         <class name="ErayAydin\Fingerprint\Console\AboutCommandRegistrar" namespace="ErayAydin\Fingerprint\Console">
