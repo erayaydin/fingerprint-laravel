@@ -32,7 +32,7 @@
     "require": {
         "php": "^8.2",
         "illuminate/support": "^11.24",
-        "fingerprint/fingerprint-pro-server-api-sdk": "^5.0",
+        "fingerprint/fingerprint-pro-server-api-sdk": "^6.0",
         "illuminate/http": "^11.24",
         "illuminate/routing": "^11.24"
     },

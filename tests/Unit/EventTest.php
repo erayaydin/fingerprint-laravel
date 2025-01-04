@@ -2,10 +2,11 @@
 
 use ErayAydin\Fingerprint\Enums\BotDResult;
 use ErayAydin\Fingerprint\Event;
+use Fingerprint\ServerAPI\Model\BotdBotResult as FingerprintBotdBotResult;
 
 it('creates an Event instance from an EventResponse model', function () {
     $event = Event::createFromEventResponse(
-        $this->getEventResponseMock(incognito: true, botDResult: 'bad', isTor: true)
+        $this->getEventResponseMock(incognito: true, botDResult: FingerprintBotdBotResult::BAD, isTor: true)
     );
 
     expect($event->identification->requestId)->toBe('request-id')
@@ -21,7 +22,7 @@ it('creates an Event instance from an EventResponse model', function () {
 
 it('creates an Event instance with good bot', function () {
     $event = Event::createFromEventResponse(
-        $this->getEventResponseMock(incognito: true, botDResult: 'good', isTor: true)
+        $this->getEventResponseMock(incognito: true, botDResult: FingerprintBotdBotResult::GOOD, isTor: true)
     );
 
     expect($event->identification->requestId)->toBe('request-id')

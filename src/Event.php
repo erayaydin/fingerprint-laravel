@@ -4,9 +4,10 @@ namespace ErayAydin\Fingerprint;
 
 use DateTimeImmutable;
 use ErayAydin\Fingerprint\Enums\BotDResult;
-use Fingerprint\ServerAPI\Model\BotdDetectionResult;
-use Fingerprint\ServerAPI\Model\EventResponse;
-use Fingerprint\ServerAPI\Model\ProductsResponseIdentificationData;
+use Fingerprint\ServerAPI\Model\BotdBot;
+use Fingerprint\ServerAPI\Model\BotdBotResult;
+use Fingerprint\ServerAPI\Model\EventsGetResponse;
+use Fingerprint\ServerAPI\Model\Identification as FingerprintIdentification;
 
 /**
  * Class Event
@@ -31,16 +32,16 @@ class Event
     /**
      * Creates an Event instance from an EventResponse model.
      *
-     * @param  EventResponse  $model  The event response model.
+     * @param  EventsGetResponse  $model  The event response model.
      * @return self The created Event instance.
      */
-    public static function createFromEventResponse(EventResponse $model): self
+    public static function createFromEventResponse(EventsGetResponse $model): self
     {
         $products = $model->getProducts();
 
         return new self(
             self::createIdentification($products->getIdentification()->getData()),
-            self::getBotDResult($products->getBotd()->getData()->getBot()),
+            self::getBotDResult($products->getBotd()?->getData()?->getBot()),
             $products->getTor()?->getData()?->getResult(),
             $products->getVpn()->getData()->getResult(),
         );
@@ -49,10 +50,10 @@ class Event
     /**
      * Creates an Identification instance from a ProductsResponseIdentificationData model.
      *
-     * @param  ProductsResponseIdentificationData  $model  The identification data model.
+     * @param  FingerprintIdentification  $model  The identification data model.
      * @return Identification The created Identification instance.
      */
-    private static function createIdentification(ProductsResponseIdentificationData $model): Identification
+    private static function createIdentification(FingerprintIdentification $model): Identification
     {
         $timestamp = (int) ($model->getTimestamp() / 1000);
 
@@ -69,17 +70,17 @@ class Event
     }
 
     /**
-     * Gets the BotDResult from a BotdDetectionResult model.
+     * Gets the BotDResult from a BotdBot model.
      *
-     * @param  BotdDetectionResult  $botdDetectionResult  The bot detection result model.
-     * @return BotDResult|null The corresponding BotDResult or null if not exists in result model.
+     * @param  BotdBot|null  $botdBot  The bot detection result model.
+     * @return BotDResult The corresponding BotDResult or null if not exists in result model.
      */
-    private static function getBotDResult(BotdDetectionResult $botdDetectionResult): ?BotDResult
+    private static function getBotDResult(?BotdBot $botdBot): BotDResult
     {
-        return match ($botdDetectionResult->getResult()) {
-            'notDetected' => BotDResult::NotDetected,
-            'good' => BotDResult::Good,
-            'bad' => BotDResult::Bad,
+        return match ($botdBot?->getResult()) {
+            BotdBotResult::NOT_DETECTED => BotDResult::NotDetected,
+            BotdBotResult::GOOD => BotDResult::Good,
+            BotdBotResult::BAD => BotDResult::Bad,
             default => null,
         };
     }
