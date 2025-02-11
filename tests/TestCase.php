@@ -7,18 +7,19 @@ use DateTime;
 use ErayAydin\Fingerprint\Enums\BotBlockConfiguration;
 use ErayAydin\Fingerprint\Enums\TorBlockConfiguration;
 use ErayAydin\Fingerprint\FingerprintServiceProvider;
-use Fingerprint\ServerAPI\Model\BotdDetectionResult;
-use Fingerprint\ServerAPI\Model\BotdResult;
-use Fingerprint\ServerAPI\Model\Confidence;
-use Fingerprint\ServerAPI\Model\EventResponse;
-use Fingerprint\ServerAPI\Model\ProductsResponse;
-use Fingerprint\ServerAPI\Model\ProductsResponseBotd;
-use Fingerprint\ServerAPI\Model\ProductsResponseIdentification;
-use Fingerprint\ServerAPI\Model\ProductsResponseIdentificationData;
-use Fingerprint\ServerAPI\Model\SignalResponseTor;
-use Fingerprint\ServerAPI\Model\SignalResponseVpn;
-use Fingerprint\ServerAPI\Model\TorResult;
-use Fingerprint\ServerAPI\Model\VpnResult;
+use Fingerprint\ServerAPI\Model\Botd;
+use Fingerprint\ServerAPI\Model\BotdBot;
+use Fingerprint\ServerAPI\Model\BotdBotResult;
+use Fingerprint\ServerAPI\Model\EventsGetResponse;
+use Fingerprint\ServerAPI\Model\Identification;
+use Fingerprint\ServerAPI\Model\IdentificationConfidence;
+use Fingerprint\ServerAPI\Model\ProductBotd;
+use Fingerprint\ServerAPI\Model\ProductIdentification;
+use Fingerprint\ServerAPI\Model\Products;
+use Fingerprint\ServerAPI\Model\ProductTor;
+use Fingerprint\ServerAPI\Model\ProductVPN;
+use Fingerprint\ServerAPI\Model\Tor;
+use Fingerprint\ServerAPI\Model\VPN;
 use Illuminate\Contracts\Config\Repository;
 use Mockery;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -33,17 +34,17 @@ abstract class TestCase extends Orchestra
         string $ip = '127.0.0.1',
         float $confidence = 0.9,
         DateTime $time = new DateTime,
-        string $botDResult = 'notDetected',
+        BotdBotResult $botDResult = BotdBotResult::NOT_DETECTED,
         bool $isTor = false,
         bool $isVPN = false,
-    ): EventResponse {
-        $productsResponse = Mockery::mock(ProductsResponse::class);
+    ): EventsGetResponse {
+        $productsResponse = Mockery::mock(Products::class);
         $productsResponse->shouldReceive('getIdentification')->andReturn($this->getIdentificationMock($requestId, $visitorId, $incognito, $url, $ip, $confidence, $time));
         $productsResponse->shouldReceive('getBotd')->andReturn($this->getBotDResponseMock($botDResult));
         $productsResponse->shouldReceive('getTor')->andReturn($this->getTorResponseMock($isTor));
         $productsResponse->shouldReceive('getVpn')->andReturn($this->getVpnResponseMock($isVPN));
 
-        $eventResponse = Mockery::mock(EventResponse::class);
+        $eventResponse = Mockery::mock(EventsGetResponse::class);
         $eventResponse->shouldReceive('getProducts')->andReturn($productsResponse);
 
         return $eventResponse;
@@ -100,11 +101,11 @@ abstract class TestCase extends Orchestra
         string $ip,
         float $confidence,
         DateTime $time,
-    ): ProductsResponseIdentification {
-        $confidenceMock = Mockery::mock(Confidence::class);
+    ): ProductIdentification {
+        $confidenceMock = Mockery::mock(IdentificationConfidence::class);
         $confidenceMock->shouldReceive('getScore')->andReturn($confidence);
 
-        $identificationData = Mockery::mock(ProductsResponseIdentificationData::class);
+        $identificationData = Mockery::mock(Identification::class);
 
         $identificationData->shouldReceive('getTimestamp')->andReturn(1000000000000);
         $identificationData->shouldReceive('getRequestId')->andReturn($requestId);
@@ -115,44 +116,44 @@ abstract class TestCase extends Orchestra
         $identificationData->shouldReceive('getIp')->andReturn($ip);
         $identificationData->shouldReceive('getConfidence')->andReturn($confidenceMock);
 
-        $identification = Mockery::mock(ProductsResponseIdentification::class);
+        $identification = Mockery::mock(ProductIdentification::class);
 
         $identification->shouldReceive('getData')->andReturn($identificationData);
 
         return $identification;
     }
 
-    private function getBotDResponseMock(string $botDResult): ProductsResponseBotd
+    private function getBotDResponseMock(BotdBotResult $botDResult): ProductBotd
     {
-        $botDDetectionResult = Mockery::mock(BotdDetectionResult::class);
+        $botDDetectionResult = Mockery::mock(BotdBot::class);
         $botDDetectionResult->shouldReceive('getResult')->andReturn($botDResult);
 
-        $botDResultMock = Mockery::mock(BotdResult::class);
+        $botDResultMock = Mockery::mock(Botd::class);
         $botDResultMock->shouldReceive('getBot')->andReturn($botDDetectionResult);
 
-        $botDDetection = Mockery::mock(ProductsResponseBotd::class);
+        $botDDetection = Mockery::mock(ProductBotd::class);
         $botDDetection->shouldReceive('getData')->andReturn($botDResultMock);
 
         return $botDDetection;
     }
 
-    private function getTorResponseMock(bool $isTor): SignalResponseTor
+    private function getTorResponseMock(bool $isTor): ProductTor
     {
-        $torResult = Mockery::mock(TorResult::class);
+        $torResult = Mockery::mock(Tor::class);
         $torResult->shouldReceive('getResult')->andReturn($isTor);
 
-        $torResponse = Mockery::mock(SignalResponseTor::class);
+        $torResponse = Mockery::mock(ProductTor::class);
         $torResponse->shouldReceive('getData')->andReturn($torResult);
 
         return $torResponse;
     }
 
-    private function getVpnResponseMock(bool $isVPN): SignalResponseVpn
+    private function getVpnResponseMock(bool $isVPN): ProductVPN
     {
-        $vpnResult = Mockery::mock(VpnResult::class);
+        $vpnResult = Mockery::mock(VPN::class);
         $vpnResult->shouldReceive('getResult')->andReturn($isVPN);
 
-        $vpnResponse = Mockery::mock(SignalResponseVpn::class);
+        $vpnResponse = Mockery::mock(ProductVPN::class);
         $vpnResponse->shouldReceive('getData')->andReturn($vpnResult);
 
         return $vpnResponse;
