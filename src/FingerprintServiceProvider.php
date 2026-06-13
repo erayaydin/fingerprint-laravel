@@ -10,11 +10,13 @@ use ErayAydin\Fingerprint\Http\Middleware\BlockOldIdentificationMiddleware;
 use ErayAydin\Fingerprint\Http\Middleware\BlockTorMiddleware;
 use ErayAydin\Fingerprint\Http\Middleware\BlockVPNMiddleware;
 use ErayAydin\Fingerprint\Http\Middleware\MinConfidenceScoreMiddleware;
+use Fingerprint\ServerSdk\Model\Event as SdkEvent;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 
@@ -84,19 +86,23 @@ class FingerprintServiceProvider extends ServiceProvider
             ], 'fingerprint-config');
         }
 
-        $this->app->singleton(Event::class, function ($app) {
+        $this->app->singleton(SdkEvent::class, function ($app) {
             /** @var Fingerprint $fingerprint */
             $fingerprint = $app->make(Fingerprint::class);
 
-            $request = $app->make('request');
-            $requestId = $request->input('requestId', null);
+            /** @var Repository $config */
+            $config = $app->make(Repository::class);
 
-            if (! $requestId) {
+            $request = $app->make('request');
+            $eventId = $this->resolveEventId($request, $config->get('fingerprint.event_id_param'));
+
+            if (! $eventId) {
                 return null;
             }
 
-            return $fingerprint->getEvent($requestId);
+            return $fingerprint->getEvent($eventId);
         });
+        $this->app->alias(SdkEvent::class, 'fingerprint.event');
 
         /** @var Router $router */
         $router = $this->app->make(Router::class);
@@ -113,6 +119,21 @@ class FingerprintServiceProvider extends ServiceProvider
     }
 
     /**
+     * Resolve the event ID from the incoming request.
+     *
+     * @param  Request  $request  The incoming HTTP request.
+     * @param  string|null  $configuredParam  The configured query parameter name, or null to use defaults.
+     */
+    private function resolveEventId(Request $request, ?string $configuredParam): ?string
+    {
+        if ($configuredParam !== null) {
+            return $request->input($configuredParam) ?: null;
+        }
+
+        return $request->input('event_id') ?? $request->input('requestId');
+    }
+
+    /**
      * Register middleware aliases.
      *
      * @param  Router  $router  The router instance.
@@ -125,7 +146,7 @@ class FingerprintServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register middleware aliases.
+     * Register the fingerprint middleware group.
      *
      * @param  Router  $router  The router instance.
      */

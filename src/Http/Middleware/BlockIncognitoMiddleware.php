@@ -3,8 +3,8 @@
 namespace ErayAydin\Fingerprint\Http\Middleware;
 
 use Closure;
-use ErayAydin\Fingerprint\Event;
 use ErayAydin\Fingerprint\Exceptions\IncognitoModeException;
+use Fingerprint\ServerSdk\Model\Event;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Http\Request;
 
@@ -39,9 +39,7 @@ final readonly class BlockIncognitoMiddleware
      */
     public function __invoke(Request $request, Closure $next): mixed
     {
-        $incognito = $this->event->identification->incognito;
-
-        if ($this->blockIncognito && $incognito) {
+        if ($this->blockIncognito && $this->event->getIncognito() === true) {
             throw IncognitoModeException::incognitoModeDetected();
         }
 

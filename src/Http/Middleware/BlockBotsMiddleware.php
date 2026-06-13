@@ -4,9 +4,9 @@ namespace ErayAydin\Fingerprint\Http\Middleware;
 
 use Closure;
 use ErayAydin\Fingerprint\Enums\BotBlockConfiguration;
-use ErayAydin\Fingerprint\Enums\BotDResult;
-use ErayAydin\Fingerprint\Event;
 use ErayAydin\Fingerprint\Exceptions\BotDetectedException;
+use Fingerprint\ServerSdk\Model\BotResult;
+use Fingerprint\ServerSdk\Model\Event;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Http\Request;
 
@@ -41,13 +41,13 @@ final readonly class BlockBotsMiddleware
      */
     public function __invoke(Request $request, Closure $next): mixed
     {
-        $botDResult = $this->event->botD;
+        $bot = $this->event->getBot();
 
-        if ($this->isBadBotDetected($botDResult)) {
+        if ($this->isBadBotDetected($bot)) {
             throw BotDetectedException::badBotDetected();
         }
 
-        if ($this->isAnyBotDetected($botDResult)) {
+        if ($this->isAnyBotDetected($bot)) {
             throw BotDetectedException::botDetected();
         }
 
@@ -57,28 +57,28 @@ final readonly class BlockBotsMiddleware
     /**
      * Check if a bad bot is detected.
      *
-     * @param  BotDResult  $result  The result of the bot detection.
+     * @param  BotResult|null  $bot  The result of the bot detection.
      */
-    private function isBadBotDetected(BotDResult $result): bool
+    private function isBadBotDetected(?BotResult $bot): bool
     {
-        if ($this->botBlock != BotBlockConfiguration::BlockBad) {
+        if ($this->botBlock !== BotBlockConfiguration::BlockBad) {
             return false;
         }
 
-        return $result == BotDResult::Bad;
+        return $bot === BotResult::BAD;
     }
 
     /**
      * Check if any bot is detected.
      *
-     * @param  BotDResult  $result  The result of the bot detection.
+     * @param  BotResult|null  $bot  The result of the bot detection.
      */
-    private function isAnyBotDetected(BotDResult $result): bool
+    private function isAnyBotDetected(?BotResult $bot): bool
     {
-        if ($this->botBlock != BotBlockConfiguration::BlockAll) {
+        if ($this->botBlock !== BotBlockConfiguration::BlockAll) {
             return false;
         }
 
-        return $result == BotDResult::Bad || $result == BotDResult::Good;
+        return $bot === BotResult::BAD || $bot === BotResult::GOOD;
     }
 }

@@ -10,13 +10,23 @@ return [
     'api_secret' => env('FINGERPRINT_PRO_SECRET_API_KEY'),
 
     /**
+     * The query parameter name used to read the event ID from the incoming request.
+     *
+     * When null, the package looks for `event_id` first, then falls back to `requestId`
+     * for backward compatibility.
+     *
+     * Default: null
+     */
+    'event_id_param' => env('FINGERPRINT_EVENT_ID_PARAM'),
+
+    /**
      * The region of the Fingerprint Pro service.
      *
-     * Default: eu
+     * Default: global
      *
-     * Available options: `eu`/`europe`, `ap`/`asia`, `global`
+     * Available options: `global`/`us`, `eu`/`europe`, `ap`/`asia`
      */
-    'region' => env('FINGERPRINT_REGION', 'eu'),
+    'region' => env('FINGERPRINT_REGION', 'global'),
 
     /**
      * Fingerprint middleware configuration

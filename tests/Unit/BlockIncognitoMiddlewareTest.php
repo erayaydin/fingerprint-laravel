@@ -1,6 +1,5 @@
 <?php
 
-use ErayAydin\Fingerprint\Event;
 use ErayAydin\Fingerprint\Exceptions\IncognitoModeException;
 use ErayAydin\Fingerprint\Http\Middleware\BlockIncognitoMiddleware;
 use Illuminate\Contracts\Config\Repository;
@@ -13,7 +12,7 @@ beforeEach(function () {
 });
 
 it('allows request when not in incognito mode', function () {
-    $event = Event::createFromEventResponse($this->getEventResponseMock());
+    $event = $this->getSdkEventMock(incognito: false);
     $this->config->shouldReceive('get')->with('fingerprint.middleware.incognito_block')->andReturn(true);
 
     $response = (new BlockIncognitoMiddleware($event, $this->config))($this->request, $this->next);
@@ -22,14 +21,14 @@ it('allows request when not in incognito mode', function () {
 });
 
 it('blocks request when in incognito mode', function () {
-    $event = Event::createFromEventResponse($this->getEventResponseMock(incognito: true));
+    $event = $this->getSdkEventMock(incognito: true);
     $this->config->shouldReceive('get')->with('fingerprint.middleware.incognito_block')->andReturn(true);
 
     (new BlockIncognitoMiddleware($event, $this->config))($this->request, $this->next);
 })->throws(IncognitoModeException::class);
 
 it('allows request when incognito blocking is disabled', function () {
-    $event = Event::createFromEventResponse($this->getEventResponseMock(incognito: true));
+    $event = $this->getSdkEventMock(incognito: true);
     $this->config->shouldReceive('get')->with('fingerprint.middleware.incognito_block')->andReturn(false);
 
     $response = (new BlockIncognitoMiddleware($event, $this->config))($this->request, $this->next);

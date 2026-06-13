@@ -1,10 +1,10 @@
 <?php
 
-use ErayAydin\Fingerprint\Event;
 use ErayAydin\Fingerprint\Exceptions\RegionNotSupportedException;
 use ErayAydin\Fingerprint\Fingerprint;
-use Fingerprint\ServerAPI\Api\FingerprintApi;
-use Fingerprint\ServerAPI\ApiException;
+use Fingerprint\ServerSdk\Api\FingerprintApi;
+use Fingerprint\ServerSdk\ApiException;
+use Fingerprint\ServerSdk\Model\Event;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -28,7 +28,7 @@ it('creates a Fingerprint instance with provided HTTP client', function () {
     expect($fingerprint->client)->toBeInstanceOf(FingerprintApi::class);
 });
 
-it('retrieves an event by request ID', function () {
+it('retrieves an event by event ID', function () {
     $handlerStack = HandlerStack::create(new MockHandler([
         new Response(200, [], $this->responseJson),
     ]));
@@ -37,8 +37,13 @@ it('retrieves an event by request ID', function () {
     ]);
     $fingerprint = new Fingerprint($this->apiKey, $this->region, $httpClient);
 
-    $event = $fingerprint->getEvent('request-id');
+    $event = $fingerprint->getEvent('1708102555327.NLOjmg');
     expect($event)->toBeInstanceOf(Event::class);
+});
+
+it('accepts us as an alias for the global region', function () {
+    $fingerprint = new Fingerprint($this->apiKey, 'us');
+    expect($fingerprint->client)->toBeInstanceOf(FingerprintApi::class);
 });
 
 it('throws RegionNotSupportedException for unsupported region', function () {
@@ -49,12 +54,12 @@ it('throws RegionNotSupportedException for unsupported region', function () {
 
 it('throws ApiException when Fingerprint API error occurs', function () {
     $handlerStack = HandlerStack::create(new MockHandler([
-        new Response(500, [], null),
+        new Response(403, [], '{"error":{"code":"secret_api_key_required","message":"secret API key in header is missing or empty"}}'),
     ]));
     $httpClient = new Client([
         'handler' => $handlerStack,
     ]);
     $fingerprint = new Fingerprint($this->apiKey, $this->region, $httpClient);
     $this->expectException(ApiException::class);
-    $fingerprint->getEvent('request-id');
+    $fingerprint->getEvent('1708102555327.NLOjmg');
 });
