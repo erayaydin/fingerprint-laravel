@@ -2,15 +2,14 @@
 
 namespace ErayAydin\Fingerprint;
 
+use DateMalformedStringException;
 use ErayAydin\Fingerprint\Exceptions\RegionNotSupportedException;
-use Fingerprint\ServerAPI\Api\FingerprintApi;
-use Fingerprint\ServerAPI\ApiException;
-use Fingerprint\ServerAPI\Configuration;
-use Fingerprint\ServerAPI\SerializationException;
-use GuzzleHttp\Client;
+use Fingerprint\ServerSdk\Api\FingerprintApi;
+use Fingerprint\ServerSdk\ApiException;
+use Fingerprint\ServerSdk\Configuration;
+use Fingerprint\ServerSdk\Model\Event;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
-use Illuminate\Support\Arr;
 
 /**
  * Class Fingerprint
@@ -33,44 +32,38 @@ class Fingerprint
      */
     public function __construct(string $apiKey, string $region, ?ClientInterface $httpClient = null)
     {
-        $config = Configuration::getDefaultConfiguration($apiKey, Fingerprint::getRegion($region));
+        $config = new Configuration($apiKey, Fingerprint::getRegion($region));
 
-        if ($httpClient === null) {
-            $httpClient = new Client;
-        }
-
-        $this->client = new FingerprintApi($httpClient, $config);
+        $this->client = new FingerprintApi($config, $httpClient);
     }
 
     /**
-     * Retrieves an event by request ID.
+     * Retrieves an event by event ID.
      *
-     * @param  string  $requestId  The request ID of the event.
+     * @param  string  $eventId  The event ID to look up.
      * @return Event The event instance.
      *
      * @throws ApiException If there is a Fingerprint API error.
      * @throws GuzzleException If there is an HTTP client error.
-     * @throws SerializationException If there is a serialization error.
+     * @throws DateMalformedStringException
      */
-    public function getEvent(string $requestId): Event
+    public function getEvent(string $eventId): Event
     {
-        $model = Arr::first($this->client->getEvent($requestId));
-
-        return Event::createFromEventResponse($model);
+        return $this->client->getEvent($eventId);
     }
 
     /**
-     * Gets the region code based on the region name.
+     * Gets the region URL based on the region name.
      *
      * @param  string  $region  The region name.
-     * @return string The region code.
+     * @return string The region URL.
      *
      * @throws RegionNotSupportedException If the region is not supported.
      */
     private static function getRegion(string $region): string
     {
         return match ($region) {
-            'global' => Configuration::REGION_GLOBAL,
+            'global', 'us' => Configuration::REGION_GLOBAL,
             'eu', 'europe' => Configuration::REGION_EUROPE,
             'ap', 'asia' => Configuration::REGION_ASIA,
             default => throw RegionNotSupportedException::regionNotSupported($region),

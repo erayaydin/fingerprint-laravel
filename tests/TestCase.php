@@ -3,50 +3,50 @@
 namespace ErayAydin\Fingerprint\Tests;
 
 use DateInterval;
-use DateTime;
 use ErayAydin\Fingerprint\Enums\BotBlockConfiguration;
 use ErayAydin\Fingerprint\Enums\TorBlockConfiguration;
 use ErayAydin\Fingerprint\FingerprintServiceProvider;
-use Fingerprint\ServerAPI\Model\BotdDetectionResult;
-use Fingerprint\ServerAPI\Model\BotdResult;
-use Fingerprint\ServerAPI\Model\Confidence;
-use Fingerprint\ServerAPI\Model\EventResponse;
-use Fingerprint\ServerAPI\Model\ProductsResponse;
-use Fingerprint\ServerAPI\Model\ProductsResponseBotd;
-use Fingerprint\ServerAPI\Model\ProductsResponseIdentification;
-use Fingerprint\ServerAPI\Model\ProductsResponseIdentificationData;
-use Fingerprint\ServerAPI\Model\SignalResponseTor;
-use Fingerprint\ServerAPI\Model\SignalResponseVpn;
-use Fingerprint\ServerAPI\Model\TorResult;
-use Fingerprint\ServerAPI\Model\VpnResult;
+use Fingerprint\ServerSdk\Model\BotResult;
+use Fingerprint\ServerSdk\Model\Event as SdkEvent;
+use Fingerprint\ServerSdk\Model\Identification;
+use Fingerprint\ServerSdk\Model\IdentificationConfidence;
+use Fingerprint\ServerSdk\Model\IPBlockList;
 use Illuminate\Contracts\Config\Repository;
 use Mockery;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
 {
-    public function getEventResponseMock(
-        string $requestId = 'request-id',
+    public function getSdkEventMock(
+        string $eventId = '1708102555327.NLOjmg',
         string $visitorId = 'visitor-id',
-        bool $incognito = false,
-        string $url = 'https://example.com',
-        string $ip = '127.0.0.1',
+        ?bool $incognito = false,
         float $confidence = 0.9,
-        DateTime $time = new DateTime,
-        string $botDResult = 'notDetected',
-        bool $isTor = false,
-        bool $isVPN = false,
-    ): EventResponse {
-        $productsResponse = Mockery::mock(ProductsResponse::class);
-        $productsResponse->shouldReceive('getIdentification')->andReturn($this->getIdentificationMock($requestId, $visitorId, $incognito, $url, $ip, $confidence, $time));
-        $productsResponse->shouldReceive('getBotd')->andReturn($this->getBotDResponseMock($botDResult));
-        $productsResponse->shouldReceive('getTor')->andReturn($this->getTorResponseMock($isTor));
-        $productsResponse->shouldReceive('getVpn')->andReturn($this->getVpnResponseMock($isVPN));
+        int $timestampMs = 1708102555327,
+        ?BotResult $bot = BotResult::NOT_DETECTED,
+        ?bool $vpn = false,
+        ?bool $torNode = false,
+    ): SdkEvent {
+        $confidenceMock = Mockery::mock(IdentificationConfidence::class);
+        $confidenceMock->shouldReceive('getScore')->andReturn($confidence);
 
-        $eventResponse = Mockery::mock(EventResponse::class);
-        $eventResponse->shouldReceive('getProducts')->andReturn($productsResponse);
+        $identificationMock = Mockery::mock(Identification::class);
+        $identificationMock->shouldReceive('getVisitorId')->andReturn($visitorId);
+        $identificationMock->shouldReceive('getConfidence')->andReturn($confidenceMock);
 
-        return $eventResponse;
+        $ipBlocklistMock = Mockery::mock(IPBlockList::class);
+        $ipBlocklistMock->shouldReceive('getTorNode')->andReturn($torNode);
+
+        $event = Mockery::mock(SdkEvent::class);
+        $event->shouldReceive('getEventId')->andReturn($eventId);
+        $event->shouldReceive('getIdentification')->andReturn($identificationMock);
+        $event->shouldReceive('getIncognito')->andReturn($incognito);
+        $event->shouldReceive('getTimestamp')->andReturn($timestampMs);
+        $event->shouldReceive('getBot')->andReturn($bot);
+        $event->shouldReceive('getVpn')->andReturn($vpn);
+        $event->shouldReceive('getIpBlocklist')->andReturn($ipBlocklistMock);
+
+        return $event;
     }
 
     public function getConfigRepository(?DateInterval $elapsedTime = new DateInterval('P1D')): Repository
@@ -57,7 +57,10 @@ abstract class TestCase extends Orchestra
             ->andReturn('secret');
         $configRepository->shouldReceive('get')
             ->with('fingerprint.region')
-            ->andReturn('eu');
+            ->andReturn('global');
+        $configRepository->shouldReceive('get')
+            ->with('fingerprint.event_id_param')
+            ->andReturn(null);
         $configRepository->shouldReceive('get')
             ->with('fingerprint.middleware.bot_block')
             ->andReturn(BotBlockConfiguration::BlockBad);
@@ -90,71 +93,5 @@ abstract class TestCase extends Orchestra
     protected function getEnvironmentSetUp($app): void
     {
         config()->set('database.default', 'testing');
-    }
-
-    private function getIdentificationMock(
-        string $requestId,
-        string $visitorId,
-        bool $incognito,
-        string $url,
-        string $ip,
-        float $confidence,
-        DateTime $time,
-    ): ProductsResponseIdentification {
-        $confidenceMock = Mockery::mock(Confidence::class);
-        $confidenceMock->shouldReceive('getScore')->andReturn($confidence);
-
-        $identificationData = Mockery::mock(ProductsResponseIdentificationData::class);
-
-        $identificationData->shouldReceive('getTimestamp')->andReturn(1000000000000);
-        $identificationData->shouldReceive('getRequestId')->andReturn($requestId);
-        $identificationData->shouldReceive('getVisitorId')->andReturn($visitorId);
-        $identificationData->shouldReceive('getIncognito')->andReturn($incognito);
-        $identificationData->shouldReceive('getTime')->andReturn($time);
-        $identificationData->shouldReceive('getUrl')->andReturn($url);
-        $identificationData->shouldReceive('getIp')->andReturn($ip);
-        $identificationData->shouldReceive('getConfidence')->andReturn($confidenceMock);
-
-        $identification = Mockery::mock(ProductsResponseIdentification::class);
-
-        $identification->shouldReceive('getData')->andReturn($identificationData);
-
-        return $identification;
-    }
-
-    private function getBotDResponseMock(string $botDResult): ProductsResponseBotd
-    {
-        $botDDetectionResult = Mockery::mock(BotdDetectionResult::class);
-        $botDDetectionResult->shouldReceive('getResult')->andReturn($botDResult);
-
-        $botDResultMock = Mockery::mock(BotdResult::class);
-        $botDResultMock->shouldReceive('getBot')->andReturn($botDDetectionResult);
-
-        $botDDetection = Mockery::mock(ProductsResponseBotd::class);
-        $botDDetection->shouldReceive('getData')->andReturn($botDResultMock);
-
-        return $botDDetection;
-    }
-
-    private function getTorResponseMock(bool $isTor): SignalResponseTor
-    {
-        $torResult = Mockery::mock(TorResult::class);
-        $torResult->shouldReceive('getResult')->andReturn($isTor);
-
-        $torResponse = Mockery::mock(SignalResponseTor::class);
-        $torResponse->shouldReceive('getData')->andReturn($torResult);
-
-        return $torResponse;
-    }
-
-    private function getVpnResponseMock(bool $isVPN): SignalResponseVpn
-    {
-        $vpnResult = Mockery::mock(VpnResult::class);
-        $vpnResult->shouldReceive('getResult')->andReturn($isVPN);
-
-        $vpnResponse = Mockery::mock(SignalResponseVpn::class);
-        $vpnResponse->shouldReceive('getData')->andReturn($vpnResult);
-
-        return $vpnResponse;
     }
 }

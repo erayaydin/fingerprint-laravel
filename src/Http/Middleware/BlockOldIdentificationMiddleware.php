@@ -5,8 +5,8 @@ namespace ErayAydin\Fingerprint\Http\Middleware;
 use Carbon\Carbon;
 use Closure;
 use DateInterval;
-use ErayAydin\Fingerprint\Event;
 use ErayAydin\Fingerprint\Exceptions\OldIdentificationException;
+use Fingerprint\ServerSdk\Model\Event;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Http\Request;
 
@@ -41,7 +41,7 @@ final readonly class BlockOldIdentificationMiddleware
      */
     public function __invoke(Request $request, Closure $next): mixed
     {
-        $time = Carbon::createFromImmutable($this->event->identification->time);
+        $time = Carbon::createFromTimestamp((int) ($this->event->getTimestamp() / 1000));
 
         if (Carbon::now()->sub($this->maxElapsedTime)->greaterThan($time)) {
             throw OldIdentificationException::oldIdentification();

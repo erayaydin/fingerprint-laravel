@@ -4,8 +4,8 @@ namespace ErayAydin\Fingerprint\Http\Middleware;
 
 use Closure;
 use ErayAydin\Fingerprint\Enums\TorBlockConfiguration;
-use ErayAydin\Fingerprint\Event;
 use ErayAydin\Fingerprint\Exceptions\TorDetectionException;
+use Fingerprint\ServerSdk\Model\Event;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Http\Request;
 
@@ -40,7 +40,7 @@ final readonly class BlockTorMiddleware
      */
     public function __invoke(Request $request, Closure $next): mixed
     {
-        $tor = $this->event->isTor;
+        $tor = $this->event->getIpBlocklist()?->getTorNode();
 
         if ($this->torBlock === TorBlockConfiguration::BlockAll && $tor !== false) {
             throw TorDetectionException::torDetectionRequired();

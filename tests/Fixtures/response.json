@@ -1,318 +1,297 @@
 {
-  "products": {
-    "identification": {
-      "data": {
-        "visitorId": "Ibk1527CUFmcnjLwIs4A9",
-        "requestId": "1708102555327.NLOjmg",
-        "incognito": true,
-        "linkedId": "somelinkedId",
-        "tag": {},
-        "time": "2019-05-21T16:40:13Z",
-        "timestamp": 1582299576512,
-        "url": "https://www.example.com/login?hope{this{works[!",
-        "ip": "61.127.217.15",
-        "ipLocation": {
-          "accuracyRadius": 10,
-          "latitude": 49.982,
-          "longitude": 36.2566,
-          "postalCode": "61202",
-          "timezone": "Europe/Dusseldorf",
-          "city": {
-            "name": "Dusseldorf"
-          },
-          "country": {
-            "code": "DE",
-            "name": "Germany"
-          },
-          "continent": {
-            "code": "EU",
-            "name": "Europe"
-          },
-          "subdivisions": [
-            {
-              "isoCode": "63",
-              "name": "North Rhine-Westphalia"
-            }
-          ]
-        },
-        "browserDetails": {
-          "browserName": "Chrome",
-          "browserMajorVersion": "74",
-          "browserFullVersion": "74.0.3729",
-          "os": "Windows",
-          "osVersion": "7",
-          "device": "Other",
-          "userAgent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) ...."
-        },
-        "confidence": {
-          "score": 0.97
-        },
-        "visitorFound": false,
-        "firstSeenAt": {
-          "global": "2022-03-16T11:26:45.362Z",
-          "subscription": "2022-03-16T11:31:01.101Z"
-        },
-        "lastSeenAt": {
-          "global": null,
-          "subscription": null
-        }
-      }
+  "linked_id": "somelinkedId",
+  "tags": {},
+  "timestamp": 1708102555327,
+  "event_id": "1708102555327.NLOjmg",
+  "incremental_identification_status": "completed",
+  "url": "https://www.example.com/login?hope{this{works[!",
+  "ip_address": "61.127.217.15",
+  "user_agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) ....",
+  "client_referrer": "https://example.com/blog/my-article",
+  "browser_details": {
+    "browser_name": "Chrome",
+    "browser_major_version": "74",
+    "browser_full_version": "74.0.3729",
+    "os": "Windows",
+    "os_version": "7",
+    "device": "Other"
+  },
+  "identification": {
+    "visitor_id": "Ibk1527CUFmcnjLwIs4A9",
+    "confidence": {
+      "score": 0.97,
+      "version": "1.1"
     },
-    "botd": {
-      "data": {
-        "bot": {
-          "result": "notDetected"
-        },
-        "url": "https://www.example.com/login?hope{this{works}[!",
-        "ip": "61.127.217.15",
-        "time": "2019-05-21T16:40:13Z",
-        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 YaBrowser/24.1.0.0 Safari/537.36",
-        "requestId": "1708102555327.NLOjmg"
-      }
+    "visitor_found": false,
+    "first_seen_at": 1708102555327,
+    "last_seen_at": 1708102555327
+  },
+  "supplementary_id_high_recall": {
+    "visitor_id": "0jnGMkPYXX37DqVa4ZIO3f_hr",
+    "visitor_found": true,
+    "confidence": {
+      "score": 0,
+      "version": "Not Supported"
     },
-    "rootApps": {
-      "data": {
-        "result": false
-      }
-    },
-    "emulator": {
-      "data": {
-        "result": false
-      }
-    },
-    "ipInfo": {
-      "data": {
-        "v4": {
-          "address": "94.142.239.124",
-          "geolocation": {
-            "accuracyRadius": 20,
-            "latitude": 50.05,
-            "longitude": 14.4,
-            "postalCode": "150 00",
-            "timezone": "Europe/Prague",
-            "city": {
-              "name": "Prague"
-            },
-            "country": {
-              "code": "CZ",
-              "name": "Czechia"
-            },
-            "continent": {
-              "code": "EU",
-              "name": "Europe"
-            },
-            "subdivisions": [
-              {
-                "isoCode": "10",
-                "name": "Hlavni mesto Praha"
-              }
-            ]
-          },
-          "asn": {
-            "asn": "7922",
-            "name": "COMCAST-7922",
-            "network": "73.136.0.0/13"
-          },
-          "datacenter": {
-            "result": true,
-            "name": "DediPath"
+    "first_seen_at": 1778086556130,
+    "last_seen_at": 1778604975494
+  },
+  "proximity": {
+    "id": "w1aTfd4MCvl",
+    "precision_radius": 10,
+    "confidence": 0.95
+  },
+  "bot": "not_detected",
+  "root_apps": false,
+  "emulator": false,
+  "ip_info": {
+    "v4": {
+      "address": "94.142.239.124",
+      "geolocation": {
+        "accuracy_radius": 20,
+        "latitude": 50.05,
+        "longitude": 14.4,
+        "postal_code": "150 00",
+        "timezone": "Europe/Prague",
+        "city_name": "Prague",
+        "country_code": "CZ",
+        "country_name": "Czechia",
+        "continent_code": "EU",
+        "continent_name": "Europe",
+        "subdivisions": [
+          {
+            "iso_code": "10",
+            "name": "Hlavni mesto Praha"
           }
-        },
-        "v6": {
-          "address": "2001:db8:3333:4444:5555:6666:7777:8888",
-          "geolocation": {
-            "accuracyRadius": 5,
-            "latitude": 49.982,
-            "longitude": 36.2566,
-            "postalCode": "10112",
-            "timezone": "Europe/Berlin",
-            "city": {
-              "name": "Berlin"
-            },
-            "country": {
-              "code": "DE",
-              "name": "Germany"
-            },
-            "continent": {
-              "code": "EU",
-              "name": "Europe"
-            },
-            "subdivisions": [
-              {
-                "isoCode": "BE",
-                "name": "Land Berlin"
-              }
-            ]
-          },
-          "asn": {
-            "asn": "6805",
-            "name": "Telefonica Germany",
-            "network": "2a02:3100::/24"
-          },
-          "datacenter": {
-            "result": false,
-            "name": ""
+        ]
+      },
+      "asn": "7922",
+      "asn_name": "COMCAST-7922",
+      "asn_network": "73.136.0.0/13",
+      "asn_type": "isp",
+      "datacenter_result": true,
+      "datacenter_name": "DediPath"
+    },
+    "v6": {
+      "address": "2001:db8:3333:4444:5555:6666:7777:8888",
+      "geolocation": {
+        "accuracy_radius": 5,
+        "latitude": 49.982,
+        "longitude": 36.2566,
+        "postal_code": "10112",
+        "timezone": "Europe/Berlin",
+        "city_name": "Berlin",
+        "country_code": "DE",
+        "country_name": "Germany",
+        "continent_code": "EU",
+        "continent_name": "Europe",
+        "subdivisions": [
+          {
+            "iso_code": "BE",
+            "name": "Land Berlin"
           }
-        }
-      }
-    },
-    "ipBlocklist": {
-      "data": {
-        "result": false,
-        "details": {
-          "emailSpam": false,
-          "attackSource": false
-        }
-      }
-    },
-    "tor": {
-      "data": {
-        "result": false
-      }
-    },
-    "vpn": {
-      "data": {
-        "result": false,
-        "originTimezone": "Europe/Berlin",
-        "originCountry": "unknown",
-        "methods": {
-          "timezoneMismatch": false,
-          "publicVPN": false,
-          "auxiliaryMobile": false,
-          "osMismatch": false
-        }
-      }
-    },
-    "proxy": {
-      "data": {
-        "result": false
-      }
-    },
-    "incognito": {
-      "data": {
-        "result": false
-      }
-    },
-    "tampering": {
-      "data": {
-        "result": false,
-        "anomalyScore": 0.1955
-      }
-    },
-    "clonedApp": {
-      "data": {
-        "result": false
-      }
-    },
-    "factoryReset": {
-      "data": {
-        "time": "1970-01-01T00:00:00Z",
-        "timestamp": 0
-      }
-    },
-    "jailbroken": {
-      "data": {
-        "result": false
-      }
-    },
-    "frida": {
-      "data": {
-        "result": false
-      }
-    },
-    "privacySettings": {
-      "data": {
-        "result": false
-      }
-    },
-    "virtualMachine": {
-      "data": {
-        "result": false
-      }
-    },
-    "rawDeviceAttributes": {
-      "data": {
-        "architecture": {
-          "value": 127
-        },
-        "audio": {
-          "value": 35.73832903057337
-        },
-        "canvas": {
-          "value": {
-            "Winding": true,
-            "Geometry": "4dce9d6017c3e0c052a77252f29f2b1c",
-            "Text": "dd2474a56ff78c1de3e7a07070ba3b7d"
-          }
-        },
-        "colorDepth": {
-          "value": 30
-        },
-        "colorGamut": {
-          "value": "p3"
-        },
-        "contrast": {
-          "value": 0
-        },
-        "cookiesEnabled": {
-          "value": true
-        },
-        "cpuClass": {},
-        "fonts": {
-          "value": [
-            "Arial Unicode MS",
-            "Gill Sans",
-            "Helvetica Neue",
-            "Menlo"
-          ]
-        }
-      }
-    },
-    "highActivity": {
-      "data": {
-        "result": false
-      }
-    },
-    "locationSpoofing": {
-      "data": {
-        "result": false
-      }
-    },
-    "remoteControl": {
-      "data": {
-        "result": false
-      }
-    },
-    "velocity": {
-      "data": {
-        "distinctIp": {
-          "intervals": {
-            "5m": 1,
-            "1h": 1,
-            "24h": 1
-          }
-        },
-        "distinctLinkedId": {},
-        "distinctCountry": {
-          "intervals": {
-            "5m": 1,
-            "1h": 2,
-            "24h": 2
-          }
-        },
-        "events": {
-          "intervals": {
-            "5m": 1,
-            "1h": 5,
-            "24h": 5
-          }
-        }
-      }
-    },
-    "developerTools": {
-      "data": {
-        "result": false
-      }
+        ]
+      },
+      "asn": "6805",
+      "asn_name": "Telefonica Germany",
+      "asn_network": "2a02:3100::/24",
+      "asn_type": "isp",
+      "datacenter_result": false,
+      "datacenter_name": ""
     }
-  }
+  },
+  "ip_blocklist": {
+    "email_spam": false,
+    "attack_source": false,
+    "tor_node": false
+  },
+  "proxy": true,
+  "proxy_confidence": "low",
+  "proxy_details": {
+    "proxy_type": "residential",
+    "last_seen_at": 1708102555327,
+    "provider": "Massive"
+  },
+  "proxy_ml_score": 0.2,
+  "vpn": false,
+  "vpn_confidence": "high",
+  "vpn_origin_timezone": "Europe/Berlin",
+  "vpn_origin_country": "unknown",
+  "vpn_methods": {
+    "timezone_mismatch": false,
+    "public_vpn": false,
+    "auxiliary_mobile": false,
+    "os_mismatch": false,
+    "relay": false
+  },
+  "incognito": false,
+  "tampering": false,
+  "tampering_confidence": "high",
+  "tampering_ml_score": 0.3231,
+  "tampering_details": {
+    "anomaly_score": 0.1955,
+    "anti_detect_browser": false
+  },
+  "cloned_app": false,
+  "factory_reset_timestamp": 0,
+  "jailbroken": false,
+  "simulator": false,
+  "frida": false,
+  "privacy_settings": false,
+  "virtual_machine": false,
+  "virtual_machine_ml_score": 0.2,
+  "location_spoofing": false,
+  "velocity": {
+    "distinct_ip": {
+      "5_minutes": 1,
+      "1_hour": 1,
+      "24_hours": 1
+    },
+    "distinct_country": {
+      "5_minutes": 1,
+      "1_hour": 2,
+      "24_hours": 2
+    },
+    "events": {
+      "5_minutes": 1,
+      "1_hour": 5,
+      "24_hours": 5
+    },
+    "ip_events": {
+      "5_minutes": 1,
+      "1_hour": 5,
+      "24_hours": 5
+    },
+    "distinct_ip_by_linked_id": {
+      "5_minutes": 1,
+      "1_hour": 5,
+      "24_hours": 5
+    },
+    "distinct_visitor_id_by_linked_id": {
+      "5_minutes": 1,
+      "1_hour": 5,
+      "24_hours": 5
+    }
+  },
+  "developer_tools": false,
+  "mitm_attack": false,
+  "sdk": {
+    "platform": "js",
+    "version": "3.11.10",
+    "integrations": [
+      {
+        "name": "fingerprint-pro-react",
+        "version": "3.11.10",
+        "subintegration": {
+          "name": "preact",
+          "version": "10.21.0"
+        }
+      }
+    ]
+  },
+  "replayed": false,
+  "high_activity_device": false,
+  "raw_device_attributes": {
+    "math": "5f030fa7d2e5f9f757bfaf81642eb1a6",
+    "vendor": "Google Inc.",
+    "plugins": [
+        {
+            "description": "Portable Document Format",
+            "mimeTypes": [
+                {
+                    "suffixes": "pdf",
+                    "type": "application/pdf"
+                },
+                {
+                    "suffixes": "pdf",
+                    "type": "text/pdf"
+                }
+            ],
+            "name": "PDF Viewer"
+        }
+    ],
+    "webgl_extensions": {
+        "context_attributes": "6b1ed336830d2bc96442a9d76373252a",
+        "extension_parameters": "86a8abb36f0cb30b5946dec0c761d042",
+        "extensions": "57233d7b10f89fcd1ff95e3837ccd72d",
+        "parameters": "ea118c48e308bc4b0677118bbb3019ec",
+        "shader_precisions": "f223dfbcd580cf142da156d93790eb83",
+        "unsupported_extensions": []
+    },
+    "cookies_enabled": true,
+    "webgl_basics": {
+        "renderer": "WebKit WebGL",
+        "renderer_unmasked": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4, Unspecified Version)",
+        "shading_language_version": "WebGL GLSL ES 1.0 (OpenGL ES GLSL ES 1.0 Chromium)",
+        "vendor": "WebKit",
+        "vendor_unmasked": "Google Inc. (Apple)",
+        "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)"
+    },
+    "canvas": {
+        "geometry": "db3c1462576a399a03ae93d0ab9eb5c4",
+        "text": "70c3d3f7eb4408dc37a6bf8af1c51029",
+        "winding": true
+    },
+    "hardware_concurrency": 10,
+    "languages": [
+        [
+            "en-US"
+        ]
+    ],
+    "color_depth": 24,
+    "fonts": [
+        "Arial Unicode MS",
+        "Gill Sans",
+        "Helvetica Neue",
+        "Menlo"
+    ],
+    "indexed_db": true,
+    "touch_support": {
+        "max_touch_points": 0,
+        "touch_event": false,
+        "touch_start": false
+    },
+    "device_memory": 8,
+    "oscpu": "Windows NT 6.1; Win64; x64",
+    "architecture": 127,
+    "screen_resolution": [
+        1920,
+        1080
+    ],
+    "timezone": "America/Sao_Paulo",
+    "emoji": {
+        "bottom": 32,
+        "font": "Times",
+        "height": 18,
+        "left": 8,
+        "right": 1608,
+        "top": 14,
+        "width": 1600,
+        "x": 8,
+        "y": 14
+    },
+    "font_preferences": {
+        "apple": 147.5625,
+        "default": 147.5625,
+        "min": 9.234375,
+        "mono": 133.0625,
+        "sans": 144.015625,
+        "serif": 147.5625,
+        "system": 146.09375
+    },
+    "platform": "MacIntel",
+    "local_storage": true,
+    "session_storage": true,
+    "date_time_locale": "en-US",
+    "audio": 124.04347745512496
+  },
+  "rare_device": false,
+  "rare_device_percentile_bucket": "<p95",
+  "labels":[
+    {
+      "label": "fraud",
+      "prediction": false,
+      "ml_score": 0.01
+    }
+  ]
 }

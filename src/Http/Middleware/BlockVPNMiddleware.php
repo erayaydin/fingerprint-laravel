@@ -3,8 +3,8 @@
 namespace ErayAydin\Fingerprint\Http\Middleware;
 
 use Closure;
-use ErayAydin\Fingerprint\Event;
 use ErayAydin\Fingerprint\Exceptions\VPNDetectedException;
+use Fingerprint\ServerSdk\Model\Event;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Http\Request;
 
@@ -34,10 +34,12 @@ final readonly class BlockVPNMiddleware
      *
      * @param  Request  $request  The incoming HTTP request.
      * @param  Closure  $next  The next middleware in the pipeline.
+     *
+     * @throws VPNDetectedException
      */
     public function __invoke(Request $request, Closure $next): mixed
     {
-        if ($this->blockVPN && $this->event->isVPN) {
+        if ($this->blockVPN && $this->event->getVpn() === true) {
             throw VPNDetectedException::vpnDetected();
         }
 
