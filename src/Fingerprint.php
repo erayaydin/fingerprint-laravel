@@ -40,7 +40,7 @@ class Fingerprint
     /**
      * Retrieves an event by event ID.
      *
-     * @param string $eventId The event ID to look up.
+     * @param  string  $eventId  The event ID to look up.
      * @return Event The event instance.
      *
      * @throws ApiException If there is a Fingerprint API error.

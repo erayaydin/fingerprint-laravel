@@ -2,6 +2,12 @@
 
 use ErayAydin\Fingerprint\Enums\BotBlockConfiguration;
 use ErayAydin\Fingerprint\Enums\TorBlockConfiguration;
+use ErayAydin\Fingerprint\Http\Middleware\BlockBotsMiddleware;
+use ErayAydin\Fingerprint\Http\Middleware\BlockIncognitoMiddleware;
+use ErayAydin\Fingerprint\Http\Middleware\BlockOldIdentificationMiddleware;
+use ErayAydin\Fingerprint\Http\Middleware\BlockTorMiddleware;
+use ErayAydin\Fingerprint\Http\Middleware\BlockVPNMiddleware;
+use ErayAydin\Fingerprint\Http\Middleware\MinConfidenceScoreMiddleware;
 
 return [
     /**
@@ -42,7 +48,7 @@ return [
          *
          * Default: BotBlockConfiguration::BlockBad
          *
-         * @see \ErayAydin\Fingerprint\Http\Middleware\BlockBotsMiddleware
+         * @see BlockBotsMiddleware
          */
         'bot_block' => BotBlockConfiguration::BlockBad,
 
@@ -51,7 +57,7 @@ return [
          *
          * Default: true
          *
-         * @see \ErayAydin\Fingerprint\Http\Middleware\BlockVPNMiddleware::Class
+         * @see BlockVPNMiddleware::Class
          */
         'vpn_block' => true,
 
@@ -64,7 +70,7 @@ return [
          *
          * Default: TorBlockConfiguration::BlockIfSignaled
          *
-         * @see \ErayAydin\Fingerprint\Http\Middleware\BlockTorMiddleware::class
+         * @see BlockTorMiddleware::class
          */
         'tor_block' => TorBlockConfiguration::BlockIfSignaled,
 
@@ -74,7 +80,7 @@ return [
          *
          * Default: 0.8
          *
-         * @see \ErayAydin\Fingerprint\Http\Middleware\MinConfidenceScoreMiddleware::class
+         * @see MinConfidenceScoreMiddleware::class
          */
         'min_confidence' => 0.8,
 
@@ -83,7 +89,7 @@ return [
          *
          * Default: true
          *
-         * @see \ErayAydin\Fingerprint\Http\Middleware\BlockIncognitoMiddleware::class
+         * @see BlockIncognitoMiddleware::class
          */
         'incognito_block' => true,
 
@@ -92,7 +98,7 @@ return [
          *
          * Default: 10 seconds
          *
-         * @see \ErayAydin\Fingerprint\Http\Middleware\BlockOldIdentificationMiddleware::class
+         * @see BlockOldIdentificationMiddleware::class
          * @see DateInterval
          * @link https://php.net/manual/en/dateinterval.construct.php
          */
